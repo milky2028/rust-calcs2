@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WASM</title>
+</head>
+
+<body>
+
+    <script type="module">
+        // import from here, rather than from the module returned by init
+        // the module returned by init is not the complete module
+        import init, { total } from './pkg/rust_calcs2.js';
+
+        init().then(() => {
+            let items = Array.from([{ thing: 10 }, { thing: 30 }, 'hey']);
+            const res = total(items, 'thing');
+
+            console.log(res);
+        })
+    </script>
+</body>
+
+</html>
