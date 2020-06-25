@@ -1,9 +1,20 @@
+// When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
+// allocator.
+#[cfg(feature = "wee_alloc")]
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
+#[cfg(debug_assertions)]
+mod utils;
 use js_sys::{Array, JsString, Reflect};
 use wasm_bindgen::prelude::*;
 
 #[no_mangle]
 #[wasm_bindgen]
 pub fn total(objects: &Array, key: &JsString) -> f64 {
+    // use debug panic hook in dev
+    #[cfg(debug_assertions)]
+    utils::set_panic_hook();
     // convert array to vector, then iterator
     objects
         .to_vec()
@@ -15,25 +26,4 @@ pub fn total(objects: &Array, key: &JsString) -> f64 {
             _ => 0_f64,
         })
         .fold(0_f64, |acc, i| acc + i)
-}
-
-// run tests with wasm-pack --node
-#[cfg(test)]
-mod tests {
-    // looks into enclosing file/module for stuff
-    use super::*;
-    use js_sys::JSON;
-    use wasm_bindgen_test::*;
-
-    // test wrapper to run wasm tests in node. Does not work with usual cargo test
-    #[wasm_bindgen_test]
-    fn test_total() {
-        let test_arr = Array::from(
-            // create a test array by parsing JSON from a raw string
-            &JSON::parse(r#"[{ "thing": 15 }, { "thing": 31 }, { "thing": 14 }]"#).unwrap(),
-        );
-
-        let res = total(&test_arr, &JsString::from("thing"));
-        assert_eq!(60_f64, res)
-    }
 }
