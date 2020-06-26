@@ -1,4 +1,5 @@
-const w = require('./pkg')
-const items = [{ thing: 10 }, { thing: 30 }, 16];
+const { total_value } = require('./pkg')
+let items = [{ id: 'first', value: 30 }, { id: 'first', value: 30 }, { id: 'first', value: 30 }];
+const res = total_value(items);
 
-console.log(w.total(items, 'thing'));
+console.log(res);
