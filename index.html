@@ -12,11 +12,11 @@
     <script type="module">
         // import from here, rather than from the module returned by init
         // the module returned by init is not the complete module
-        import init, { total } from './pkg/rust_calcs2.js';
+        import init, { total_value } from './pkg/rust_calcs2.js';
 
         init().then(() => {
-            let items = Array.from([{ thing: 10 }, { thing: 30 }, 'hey']);
-            const res = total(items, 'thing');
+            let items = [{ id: 'first', value: 30 }, { id: 'first', value: 30 }, { id: 'first', value: 30 }];
+            const res = total_value(items);
 
             console.log(res);
         })
