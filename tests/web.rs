@@ -7,20 +7,20 @@ extern crate wasm_bindgen_test;
 
 wasm_bindgen_test_configure!(run_in_browser);
 
-use js_sys::{Array, JsString, JSON};
+use js_sys::JSON;
 use wasm_bindgen_test::*;
 
-#[path = "../src/lib.rs"]
-mod lib;
-use lib::*;
+#[path = "../src/js_translation_layer.rs"]
+mod web_layer;
+use web_layer::total_value;
 
 #[wasm_bindgen_test]
 fn test_total() {
-    let test_arr = Array::from(
-        // create a test array by parsing JSON from a raw string
-        &JSON::parse(r#"[{ "thing": 15 }, { "thing": 31 }, { "thing": 14 }]"#).unwrap(),
-    );
+    let test_arr = JSON::parse(
+        r#"[{ "id": "first", "value": 30 }, { "id": "first", "value": 30 }, { "id": "first", "value": 30 }]"#,
+    )
+    .unwrap();
 
-    let res = total(&test_arr, &JsString::from("thing"));
-    assert_eq!(60_f64, res)
+    let res = total_value(test_arr);
+    assert_eq!(90_f64, res)
 }
