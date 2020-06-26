@@ -8,7 +8,7 @@ pub struct Data {
     pub value: f64,
 }
 
-#[cfg_attr(target_arch = "x86_64", no_mangle)]
+#[cfg_attr(not(target_arch = "wasm32"), no_mangle)]
 pub fn total(data: &Vec<Data>) -> f64 {
     data.iter().fold(0_f64, |acc, i| acc + i.value)
 }
